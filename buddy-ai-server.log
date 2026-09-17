@@ -8,3 +8,45 @@
   Help agents write better Streamlit apps?
   Install the official Streamlit skills by running streamlit skills in your terminal.
 
+2026-09-17 14:08:48.487 Uncaught app execution
+Traceback (most recent call last):
+  File "C:\Users\MAYANK\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\streamlit\runtime\scriptrunner\exec_code.py", line 136, in exec_func_with_error_handling
+    result = func()
+  File "C:\Users\MAYANK\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\streamlit\runtime\scriptrunner\script_runner.py", line 909, in code_to_exec
+    exec(code, module.__dict__)  # noqa: S102
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MAYANK\Desktop\buddy-ai\app.py", line 272, in <module>
+    st.session_state[ans_key] = st.text_input("Your answer", value=st.session_state[ans_key], key=ans_key)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\MAYANK\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\streamlit\runtime\metrics_util.py", line 725, in wrapped_func
+    result = non_optional_func(*args, **kwargs)
+  File "C:\Users\MAYANK\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\streamlit\runtime\state\session_state_proxy.py", line 114, in __setitem__
+    get_session_state()[key] = value
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\MAYANK\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\streamlit\runtime\state\safe_session_state.py", line 126, in __setitem__
+    self._state[key] = value
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\MAYANK\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\streamlit\runtime\state\session_state.py", line 860, in __setitem__
+    raise StreamlitWidgetAlreadyInstantiatedError(user_key)
+streamlit.errors.StreamlitWidgetAlreadyInstantiatedError: `st.session_state.ans_0` cannot be modified after the widget with key `ans_0` is instantiated.
+2026-09-17 14:09:45.555 Uncaught app execution
+Traceback (most recent call last):
+  File "C:\Users\MAYANK\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\streamlit\runtime\scriptrunner\exec_code.py", line 136, in exec_func_with_error_handling
+    result = func()
+  File "C:\Users\MAYANK\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\streamlit\runtime\scriptrunner\script_runner.py", line 909, in code_to_exec
+    exec(code, module.__dict__)  # noqa: S102
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MAYANK\Desktop\buddy-ai\app.py", line 272, in <module>
+    st.session_state[ans_key] = st.text_input("Your answer", value=st.session_state[ans_key], key=ans_key)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\MAYANK\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\streamlit\runtime\metrics_util.py", line 725, in wrapped_func
+    result = non_optional_func(*args, **kwargs)
+  File "C:\Users\MAYANK\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\streamlit\runtime\state\session_state_proxy.py", line 114, in __setitem__
+    get_session_state()[key] = value
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\MAYANK\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\streamlit\runtime\state\safe_session_state.py", line 126, in __setitem__
+    self._state[key] = value
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\MAYANK\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\streamlit\runtime\state\session_state.py", line 860, in __setitem__
+    raise StreamlitWidgetAlreadyInstantiatedError(user_key)
+streamlit.errors.StreamlitWidgetAlreadyInstantiatedError: `st.session_state.ans_0` cannot be modified after the widget with key `ans_0` is instantiated.
