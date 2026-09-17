@@ -89,8 +89,8 @@ def get_gpt_response(api_key, user_input, buddy_name, chat_history):
         # Gemini requires key in URL query param
         url = f"{st.session_state.api_url}?key={api_key}"
         
-        # Build Gemini-style contents
-        contents = [{"role": "user", "parts": [{"text": f"You are {buddy_name}. {user_input}"}]}]
+        # Build Gemini-style contents with clear instruction
+        contents = [{"role": "user", "parts": [{"text": f"You are {buddy_name}, a friendly and helpful AI assistant. Give a complete, engaging answer to: {user_input}"}]}]
         
         # Add recent history
         recent = chat_history[-10:] if len(chat_history) > 10 else chat_history
@@ -102,14 +102,19 @@ def get_gpt_response(api_key, user_input, buddy_name, chat_history):
         
         data = {
             "contents": contents,
-            "generationConfig": {"maxOutputTokens": 500, "temperature": 0.7}
+            "generationConfig": {"maxOutputTokens": 2048, "temperature": 0.7}
         }
         
         response = requests.post(url, json=data, timeout=30)
         
         if response.status_code == 200:
             result = response.json()
-            return result["candidates"][0]["content"]["parts"][0]["text"]
+            try:
+                parts = result["candidates"][0]["content"]["parts"]
+                text = "".join(str(p.get("text", "")) for p in parts)
+                return text if text else generate_buddy_response(user_input, buddy_name)
+            except Exception:
+                return generate_buddy_response(user_input, buddy_name)
         else:
             st.error(f"API Error: {response.json().get('error', {}).get('message', 'Unknown error')}")
             return generate_buddy_response(user_input, buddy_name)
