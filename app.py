@@ -2,8 +2,10 @@ import streamlit as st
 import time, random, requests, re, io
 import pymupdf as fitz  # PyMuPDF
 from datetime import datetime
-
-DEFAULT_GEMINI_API_KEY = "AQ.Ab8RN6J6QPqVVNRKaakkgsYTistm2GJudxQWh4flHvZksAzvYA"
+import os
+from dotenv import load_dotenv
+load_dotenv()
+DEFAULT_GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 
 
 
