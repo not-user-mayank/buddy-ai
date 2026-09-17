@@ -2,17 +2,25 @@ import streamlit as st
 import time
 import random
 import requests
-import os
+import re
 from datetime import datetime
 
-DEFAULT_GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+DEFAULT_GEMINI_API_KEY = "AQ.Ab8RN6J6QPqVVNRKaakkgsYTistm2GJudxQWh4flHvZksAzvYA"
+
+
+
+def _word_in_text(text, word):
+    return bool(re.search(r"" + re.escape(word) + r"", text))
+
+def _phrase_in_text(text, phrase):
+    return phrase in text
 
 def generate_buddy_response(user_input, buddy_name):
     """Generate a simple response based on user input"""
     user_input_lower = user_input.lower()
     
     # Greeting responses
-    if any(word in user_input_lower for word in ["hello", "hi", "hey", "greetings"]):
+    if any(_word_in_text(user_input_lower, w) for w in ["hello", "hi", "hey", "greetings"]):
         responses = [
             f"Hello there! I'm {buddy_name}, your friendly AI buddy! 👋",
             f"Hey! {buddy_name} here! How's your day going? 😊",
@@ -21,7 +29,7 @@ def generate_buddy_response(user_input, buddy_name):
         return random.choice(responses)
     
     # How are you responses
-    elif any(word in user_input_lower for word in ["how are you", "how do you do", "how's it going"]):
+    elif any(_phrase_in_text(user_input_lower, p) for p in ["how are you", "how do you do", "how's it going"]):
         responses = [
             f"I'm doing great! Thanks for asking. How about you? 😊",
             f"I'm feeling fantastic today! Ready to chat with you! 💫",
@@ -30,7 +38,7 @@ def generate_buddy_response(user_input, buddy_name):
         return random.choice(responses)
     
     # Help/request responses
-    elif any(word in user_input_lower for word in ["help", "assist", "support", "can you"]):
+    elif any(_word_in_text(user_input_lower, w) for w in ["help", "assist", "support"]) or _phrase_in_text(user_input_lower, "can you"):
         responses = [
             f"Of course! I'm here to help you with whatever you need. What can I do for you today? 🤝",
             f"You've got it! {buddy_name} is at your service. What do you need help with? 💪",
@@ -39,7 +47,7 @@ def generate_buddy_response(user_input, buddy_name):
         return random.choice(responses)
     
     # Joke requests
-    elif any(word in user_input_lower for word in ["joke", "funny", "laugh", "humor"]):
+    elif any(_word_in_text(user_input_lower, w) for w in ["joke", "funny", "laugh", "humor"]):
         jokes = [
             "Why don't scientists trust atoms anymore? Because they make up everything! 😄",
             "I told my wife she was drawing her eyebrows too high. She looked surprised! 😳",
@@ -50,12 +58,12 @@ def generate_buddy_response(user_input, buddy_name):
         return random.choice(jokes)
     
     # Time/date queries
-    elif any(word in user_input_lower for word in ["time", "date", "day", "clock"]):
+    elif any(_word_in_text(user_input_lower, w) for w in ["time", "date", "day", "clock"]):
         now = datetime.now()
         return f"It's currently {now.strftime('%I:%M %p')} on {now.strftime('%A, %B %d, %Y')}. Time flies when we're chatting! ⏰"
     
     # Thank you responses
-    elif any(word in user_input_lower for word in ["thank", "thanks", "appreciate"]):
+    elif any(_word_in_text(user_input_lower, w) for w in ["thank", "thanks", "appreciate"]):
         responses = [
             "You're very welcome! That's what buddies are for! 😊",
             "Anytime! Happy to help my friend! 🤗",
@@ -129,9 +137,9 @@ if "api_key" not in st.session_state:
 if "user_api_key" not in st.session_state:
     st.session_state.user_api_key = ""
 if "api_url" not in st.session_state:
-    st.session_state.api_url = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-002:generateContent"
+    st.session_state.api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent"
 if "api_model" not in st.session_state:
-    st.session_state.api_model = "gemini-1.5-flash-002"
+    st.session_state.api_model = "gemini-3.6-flash"
 
 # Sidebar
 with st.sidebar:
