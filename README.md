@@ -71,3 +71,11 @@ Enjoy chatting with your AI buddy! 🤖💬
 - Check Answer with correctness feedback
 - Highlight correct reference from PDF
 - Requires: PyMuPDF (`PyMuPDF` in requirements)
+
+## Environment Setup
+Create `.env` with your Gemini key: `GEMINI_API_KEY=your_key`
+Install: `pip install -r requirements.txt` (includes `python-dotenv`)
+
+## Environment Setup
+Create `.env` with your Gemini key: `GEMINI_API_KEY=your_key`
+Install: `pip install -r requirements.txt` (includes `python-dotenv`)
