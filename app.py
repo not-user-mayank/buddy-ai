@@ -1,8 +1,6 @@
 import streamlit as st
-import time
-import random
-import requests
-import re
+import time, random, requests, re, io
+import fitz  # PyMuPDF
 from datetime import datetime
 
 DEFAULT_GEMINI_API_KEY = "AQ.Ab8RN6J6QPqVVNRKaakkgsYTistm2GJudxQWh4flHvZksAzvYA"
@@ -244,6 +242,30 @@ if prompt := st.chat_input("What's on your mind?"):
         "timestamp": response_timestamp
     })
 
+# Quick Revision Quiz - PDF Drop
+pdf_file = st.file_uploader("Drop PDF for quick revision quiz", type=["pdf"])
+if pdf_file is not None:
+    st.success("PDF received. Parsing...")
+    doc = fitz.open(stream=pdf_file.read(), filetype="pdf")
+    text = ""
+    for page in doc:
+        text += page.get_text()
+    doc.close()
+    snippet = text[:500].replace("\n", " ")
+    questions = [
+        f"Q1: Main idea: '{snippet[:120]}...'?",
+        f"Q2: Key point from '{snippet[120:250]}...'?",
+        f"Q3: Summarize: '{snippet[250:400]}...'"
+    ]
+    if st.button("Generate Quick Revision Quiz"):
+        st.info("Quiz mode activated. Answer the questions.")
+        for q in questions:
+            st.write(q)
+            st.text_input("Your answer", key=str(q))
+else:
+    st.warning("Not completed — please drop a PDF and go further.")
+
+st.divider()
 # Footer
 st.divider()
 if st.session_state.user_api_key.strip():
