@@ -143,6 +143,10 @@ if "api_url" not in st.session_state:
     st.session_state.api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent"
 if "api_model" not in st.session_state:
     st.session_state.api_model = "gemini-3.6-flash"
+if "quiz_active" not in st.session_state:
+    st.session_state.quiz_active = False
+if "quiz_answers" not in st.session_state:
+    st.session_state.quiz_answers = {}
 
 # Sidebar
 with st.sidebar:
@@ -258,12 +262,30 @@ if pdf_file is not None:
         f"Q3: Summarize: '{snippet[250:400]}...'"
     ]
     if st.button("Generate Quick Revision Quiz"):
+        st.session_state.quiz_active = True
+        st.session_state.quiz_questions = questions
+        st.session_state.quiz_snippet = snippet
         st.info("Quiz mode activated. Answer the questions.")
-        for q in questions:
+    if st.session_state.get("quiz_active"):
+        for i, q in enumerate(st.session_state.get("quiz_questions", [])):
             st.write(q)
-            ans = st.text_input("Your answer", key=str(q))
-            if st.button("Check Answer", key="check_"+str(q)[:20]):
-                st.info("Answer checked! (Manual grading or LLM can validate here.)")
+            ans_key = f"ans_{i}"
+            if ans_key not in st.session_state:
+                st.session_state[ans_key] = ""
+            st.text_input("Your answer", key=ans_key)
+            if st.button("Check Answer", key=f"check_{i}"):
+                user_ans = st.session_state.get(ans_key, "").lower()
+                # Basic check against snippet keywords
+                snippet_text = st.session_state.get("quiz_snippet", "").lower()
+                if user_ans and any(word in snippet_text for word in user_ans.split()[:3]):
+                    st.session_state[f"check_result_{i}"] = "Correct! Your answer matches the text."
+                else:
+                    st.session_state[f"check_result_{i}"] = "Not fully correct — review the PDF snippet again."
+                st.session_state[f"show_ref_{i}"] = snippet_text
+            if f"check_result_{i}" in st.session_state:
+                st.info(st.session_state[f"check_result_{i}"])
+                if f"show_ref_{i}" in st.session_state:
+                    st.success(f"✅ Correct reference: {st.session_state[f'show_ref_{i}'][:250]}...")
 else:
     st.warning("Not completed — please drop a PDF and go further.")
 
