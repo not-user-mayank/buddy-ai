@@ -1,6 +1,6 @@
 import streamlit as st
 import time, random, requests, re, io
-import fitz  # PyMuPDF
+import pymupdf as fitz  # PyMuPDF
 from datetime import datetime
 
 DEFAULT_GEMINI_API_KEY = "AQ.Ab8RN6J6QPqVVNRKaakkgsYTistm2GJudxQWh4flHvZksAzvYA"
@@ -261,7 +261,9 @@ if pdf_file is not None:
         st.info("Quiz mode activated. Answer the questions.")
         for q in questions:
             st.write(q)
-            st.text_input("Your answer", key=str(q))
+            ans = st.text_input("Your answer", key=str(q))
+            if st.button("Check Answer", key="check_"+str(q)[:20]):
+                st.info("Answer checked! (Manual grading or LLM can validate here.)")
 else:
     st.warning("Not completed — please drop a PDF and go further.")
 
