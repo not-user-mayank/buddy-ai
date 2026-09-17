@@ -1,2 +1,2 @@
-streamlit>=1.64.0PyMuPDF
-fitz
+streamlit>=1.64.0
+PyMuPDF
