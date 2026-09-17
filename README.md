@@ -65,3 +65,9 @@ This is a simple prototype designed to demonstrate basic chatbot functionality. 
 - Add more sophisticated natural language processing
 
 Enjoy chatting with your AI buddy! 🤖💬
+## New Features (Updated)
+- Drop PDF for quick revision quiz
+- Auto-generated quiz questions from PDF text
+- Check Answer with correctness feedback
+- Highlight correct reference from PDF
+- Requires: PyMuPDF (`PyMuPDF` in requirements)
