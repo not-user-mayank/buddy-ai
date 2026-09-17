@@ -2,7 +2,10 @@ import streamlit as st
 import time
 import random
 import requests
+import os
 from datetime import datetime
+
+DEFAULT_GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 
 def generate_buddy_response(user_input, buddy_name):
     """Generate a simple response based on user input"""
@@ -122,11 +125,13 @@ if "buddy_name" not in st.session_state:
     st.session_state.buddy_name = "Buddy"
 
 if "api_key" not in st.session_state:
-    st.session_state.api_key = ""
+    st.session_state.api_key = DEFAULT_GEMINI_API_KEY
+if "user_api_key" not in st.session_state:
+    st.session_state.user_api_key = ""
 if "api_url" not in st.session_state:
-    st.session_state.api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
+    st.session_state.api_url = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-002:generateContent"
 if "api_model" not in st.session_state:
-    st.session_state.api_model = "gemini-1.5-flash"
+    st.session_state.api_model = "gemini-1.5-flash-002"
 
 # Sidebar
 with st.sidebar:
@@ -139,12 +144,13 @@ with st.sidebar:
     
     st.divider()
     
-    st.session_state.api_key = st.text_input(
+    st.session_state.user_api_key = st.text_input(
         "Gemini API Key", 
-        value=st.session_state.api_key,
+        value=st.session_state.user_api_key,
         type="password",
-        placeholder="Enter your Gemini API key (starts with AI... or gsk_...)"
+        placeholder="Leave blank to use the default Gemini key"
     )
+    st.session_state.api_key = st.session_state.user_api_key.strip() or DEFAULT_GEMINI_API_KEY
     
     st.session_state.api_url = st.text_input(
         "Gemini Endpoint", 
@@ -158,7 +164,7 @@ with st.sidebar:
         placeholder="gemini-pro"
     )
     
-    st.caption("💡 Gemini-only mode. Enter your Gemini API key to use Gemini AI.")
+    st.caption("💡 Leave blank to use the default Gemini key, or enter your own.")
     
     st.divider()
     
@@ -227,8 +233,7 @@ if prompt := st.chat_input("What's on your mind?"):
 
 # Footer
 st.divider()
-if st.session_state.api_key:
-    st.caption(f"🤖 Powered by Google Gemini ({st.session_state.api_model})")
+if st.session_state.user_api_key.strip():
+    st.caption(f"🤖 Powered by Google Gemini with your API key ({st.session_state.api_model})")
 else:
-    st.caption("💡 Tip: Try asking for jokes, sharing how your day is going, or asking for help with something!")
-    st.caption("🔑 Gemini-only mode activated — enter valid Gemini key to proceed!")
+    st.caption(f"🤖 Powered by Google Gemini (default key) ({st.session_state.api_model})")
